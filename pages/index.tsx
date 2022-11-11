@@ -1,8 +1,54 @@
 import Head from "next/head";
 import Image from "next/image";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
+  const [isLoading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/groups", {
+          method: "GET",
+        });
+        // setGroups();
+        setLoading(false);
+      } catch (error) {
+        console.log({ error: "fail" });
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleAddGroup = async () => {
+    try {
+      const response = await fetch("/api/groups", {
+        method: "POST",
+        body: JSON.stringify({ name: "costa" }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      console.log(response);
+      console.log(data);
+      // setGroups();
+      setLoading(false);
+    } catch (error) {
+      console.log({ error: "fail" });
+    }
+  };
+  const incrementCount = () => {
+    console.log("increment count");
+    setCount((prev) => prev + 1);
+  };
+
+  console.log("render Home");
+
   return (
     <div className={styles.container}>
       <Head>
@@ -12,36 +58,10 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Secret Santa</h1>
-
-        <button>Créer un groupe</button>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a href="https://github.com/vercel/next.js/tree/canary/examples" className={styles.card}>
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-          </a>
-        </div>
+        <p>{count}</p>
+        <p>SALUT</p>
+        <button onClick={handleAddGroup}>Ajouter groupe</button>
+        <button onClick={incrementCount}>increment</button>
       </main>
 
       <footer className={styles.footer}>
