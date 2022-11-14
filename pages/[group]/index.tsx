@@ -13,17 +13,13 @@ export default function Group() {
   };
 
   const router = useRouter();
-  const { group } = router.query;
-  console.log("group page");
-
-  if (group !== "Costa") {
-    console.log("FAIL");
-  }
+  const { groupName } = router.query;
+  console.log({ query: groupName });
 
   return (
     <>
       <Head>
-        <title>Secret Santa - {group}</title>
+        <title>Secret Santa - {groupName}</title>
         <meta name="description" content="secret santa group page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -36,10 +32,10 @@ export default function Group() {
               query: {
                 member: member.name,
                 memberId: member.id,
-                group: group,
+                groupName: groupName,
               },
             }}
-            as={`${group}/${member.name}`}
+            as={`${groupName}/${member.name}`}
           >
             {member.name}
           </Link>

@@ -1,5 +1,6 @@
 import clientPromise from "../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getAllGroups } from "../../lib/groups";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -20,8 +21,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         break;
 
       case "GET":
-        const allGroups = await db.collection("groups").find({}).toArray();
-        console.log(allGroups);
+        const allGroups = await getAllGroups();
         res.status(200).json(allGroups);
         break;
     }
