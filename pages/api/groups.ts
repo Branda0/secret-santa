@@ -9,16 +9,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     switch (req.method) {
       case "POST":
-        const { name } = req.body;
-        console.log(req.body);
-        const response = await db
-          .collection("groups")
-          .insertOne({ name: name, members: ["tania", "gabriel", "kelly"] });
+        const { name, members } = req.body;
+        if (name && members) {
+          if (await db.collection("groups").findOne({ name: name })) {
+            res.status(409).json({ error: { message: "Nom de groupe déjà existant !" } });
+          }
 
-        res.status(200).json({
-          data: await db.collection("groups").findOne({ _id: response.insertedId }),
-        });
-        break;
+          const membersResponse = await db.collection("members").insertMany(members);
+          const groupResponse = await db.collection("groups").insertOne({ name, members });
+
+          res.status(200).json({
+            data: await db.collection("groups").findOne({ _id: groupResponse.insertedId }),
+          });
+          break;
+        } else {
+          res.status(400).json({ error: { message: "Erreur de création de groupe, veuillez réessayer" } });
+        }
 
       case "GET":
         const allGroups = await getAllGroups();
@@ -26,6 +32,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         break;
     }
   } catch (e) {
-    console.error(e);
+    res.status(400).json({ error: { message: "Erreur de création de groupe, veuillez réessayer" } });
   }
 };

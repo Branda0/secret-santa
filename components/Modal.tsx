@@ -1,15 +1,24 @@
 import { useEffect, useState, useRef } from "react";
-import { faRectangleXmark, faXmark, faPlus, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { stringify } from "querystring";
-import Tooltip from "./Tooltip";
+import { useRouter } from "next/router";
+import Image from "next/image";
 
-import { ReactNode } from "react";
-import { Number } from "mongoose";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faRectangleXmark,
+  faXmark,
+  faPlus,
+  faCircleInfo,
+  faTriangleExclamation,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
+
+import Tooltip from "./Tooltip";
+import Spinner from "./Spinner";
 
 const Modal = ({ onClose }: { onClose: () => void }) => {
   console.log("render Modal");
   const modalRef = useRef(null);
+  const router = useRouter();
 
   const [groupName, setGroupName] = useState<string>("");
   const [groupMembers, setGroupMember] = useState<{ name: string; subGroup: string }[]>([
@@ -17,11 +26,57 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     { name: "", subGroup: "2" },
     { name: "", subGroup: "3" },
   ]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isGroupCreating, setIsGroupCreating] = useState(false);
+  const [isGroupCreated, setIsGroupCreated] = useState(false);
 
-  useEffect(() => {
-    // document.body.classList.add("overflow-hidden");
-    // return document.body.classList.remove("overflow-hidden");
-  }, []);
+  // handling api call for group creation
+  const handleSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setErrorMessage("");
+
+    // filter empty member table fields
+    // if we have less than 3 members or duplicate names return error and skip api call
+    const filteredMembers = groupMembers.filter((member) => member.name != "");
+    const uniqueValues = new Set(filteredMembers.map((member) => member.name.toLowerCase()));
+
+    if (uniqueValues.size !== filteredMembers.length) {
+      setErrorMessage("Chaque membre doit avoir un nom différent");
+      return;
+    }
+    if (filteredMembers.length < 3) {
+      setErrorMessage("Au moins 3 membres sont requis pour votre groupe");
+      return;
+    }
+
+    // entry values ok => api call for db group and members creation
+    setIsGroupCreating(true);
+
+    try {
+      const response = await fetch("/api/groups", {
+        method: "POST",
+        body: JSON.stringify({ name: groupName, members: groupMembers }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const groups = await response.json();
+
+      // if update succeded reload page to get fresh SSR data
+      if (response.status == 200) {
+        setIsGroupCreated(true);
+        router.replace(router.asPath);
+      } else {
+        setErrorMessage(groups.error.message);
+      }
+      setIsGroupCreating(false);
+    } catch (error) {
+      console.log(error);
+      setErrorMessage("Erreur de création de groupe, veuillez réessayer");
+    }
+    setIsGroupCreating(false);
+  };
 
   const handleClose = () => {
     modalRef.current.classList.remove("animate-fadeIn");
@@ -43,25 +98,14 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     setGroupMember((prev) => [...prev, { name: "", subGroup: (groupMembers.length + 1).toString() }]);
   };
 
-  const updateGroupMemberName = (memberName: string, indexToUpdate: number) => {
-    const newState = groupMembers.map((member, index) => {
-      if (index === indexToUpdate) return { ...member, name: memberName };
-
-      return member;
-    });
-    setGroupMember(newState);
-  };
-
   const updateGroupMember = (
     { name, subGroup }: { name?: string; subGroup?: string },
     indexToUpdate: number
   ) => {
-    console.log("in newstate");
-    console.log(subGroup);
-    console.log(typeof subGroup);
     const newState = groupMembers.map((member, index) => {
       if (index === indexToUpdate) {
         if (name) return { ...member, name: name };
+        if (name === "") return { ...member, name: "" };
         if (subGroup) return { ...member, subGroup: subGroup };
         if (subGroup === "") return { ...member, subGroup: "" };
       }
@@ -80,7 +124,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     >
       <div
         ref={modalRef}
-        className="flex overflow-y-scroll flex-col  bg-white w-[600px] m-10 p-5 shadow-md rounded-md animate-fadeIn"
+        className="flex overflow-auto  flex-col bg-white w-[600px] m-10 p-5 shadow-md rounded-md animate-fadeIn"
       >
         <div className="flex justify-end">
           <FontAwesomeIcon
@@ -90,7 +134,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
           />
         </div>
 
-        <form action="" className="flex flex-col w-full">
+        <form onSubmit={handleSubmit} className="flex flex-col w-full">
           <label htmlFor="name" className=" px-1 font-medium text-gray-700   ">
             Groupe
           </label>
@@ -101,7 +145,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
             onChange={(e) => setGroupName(e.target.value)}
             required
             placeholder="'Votre nom de groupe'"
-            className="shadow appearance-none border rounded w-full py-2 px-3 mt-1 mb-2 text-sm  text-gray-700 leading-tight focus:outline-red-500 focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 mt-1 mb-2 text-sm capitalize text-gray-700 leading-tight focus:outline-red-500 focus:shadow-outline"
           />
           <div className="flex items-center mt-3 justify-between">
             <span className="px-1 font-medium text-gray-700 ">Membres</span>
@@ -112,29 +156,27 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
               </Tooltip>
             </div>
           </div>
-
           <div id="members" className="flex flex-col">
             {groupMembers.map((member, index) => {
               return (
-                <div className="flex" key={`member-${index}`}>
+                <div className="flex my-1" key={`member-${index}`}>
                   <input
                     type="text"
                     id="name"
                     value={member.name}
-                    onChange={(e) => updateGroupMember({ name: e.target.value }, index)}
+                    onChange={(e) => updateGroupMember({ name: e.target.value.toLowerCase() }, index)}
                     placeholder="'Nom du membre'"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 my-1  text-sm  text-gray-700 leading-tight focus:outline-red-400 focus:shadow-outline"
+                    className="shadow capitalize appearance-none border rounded w-full py-2 px-3   text-sm  text-gray-700 leading-tight focus:outline-red-400 focus:shadow-outline"
                   />
 
                   <input
                     type="number"
                     id="subGroup"
                     min={1}
-                    // max={40}
                     required
                     value={parseInt(member.subGroup)}
                     onChange={(e) => updateGroupMember({ subGroup: e.target.value }, index)}
-                    className="flex items-center  shadow appearance-none border w-10 rounded py-2 px-3 my-1 mx-2  text-sm  text-gray-700 leading-tight focus:outline-red-400 focus:shadow-outline"
+                    className="flex items-center shadow appearance-none border rounded w-10 mx-2 py-2 text-sm  text-gray-700 text-center leading-tight focus:outline-red-400 focus:shadow-outline"
                   />
 
                   <FontAwesomeIcon
@@ -151,13 +193,29 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
               onClick={handleAddMemberRow}
             />
           </div>
-
           <button
             type="submit"
-            className="self-center text-white font-medium bg-red-500 rounded-lg px-4 py-2 mt-3 hover:bg-red-400 "
+            disabled={isGroupCreated || isGroupCreating}
+            className={`flex justify-center  self-center w-full  text-white font-medium bg-red-500 rounded-lg py-2 m-1 ${
+              isGroupCreating ? "cursor-wait" : isGroupCreated ? "" : "hover:scale-[1.02] hover:shadow-md "
+            }  `}
           >
-            Créer mon groupe
+            {isGroupCreating ? (
+              <Spinner />
+            ) : isGroupCreated ? (
+              <span className="flex items-center">
+                Groupe bien enregistré <FontAwesomeIcon icon={faCheck} className="w-5 m-2 self-center" />{" "}
+              </span>
+            ) : (
+              <span>Créer mon groupe</span>
+            )}
           </button>
+          {errorMessage && (
+            <div className="flex items-center mt-3">
+              <FontAwesomeIcon icon={faTriangleExclamation} className="flex w-5 mr-3 text-red-500  " />
+              <span className="text-xs text-red-500">{errorMessage}</span>
+            </div>
+          )}
         </form>
       </div>
     </div>
