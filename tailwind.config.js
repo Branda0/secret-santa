@@ -9,6 +9,9 @@ module.exports = {
     fontFamily: {
       nunito: ["nunito", "sans-serif"],
     },
+    backgroundSize: {
+      "50%": "50%",
+    },
     extend: {
       animation: {
         fadeIn: "fadeIn 300ms ",

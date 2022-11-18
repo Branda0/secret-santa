@@ -119,12 +119,12 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     <div
       id="modal-wrapper"
       className=" fixed inset-0 bg-opacity-25 bg-black
-     backdrop-blur flex flex-col items-center justify-center"
+     backdrop-blur flex flex-col items-center justify-center px-3 sm:px-5 "
       onClick={handleOverlayClick}
     >
       <div
         ref={modalRef}
-        className="flex overflow-auto  flex-col bg-white w-[600px] m-10 p-5 shadow-md rounded-md animate-fadeIn"
+        className="flex overflow-auto flex-col bg-white w-full m-10 p-5 shadow-md rounded-md animate-fadeIn md:w-[42rem] "
       >
         <div className="flex justify-end">
           <FontAwesomeIcon
@@ -141,6 +141,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
           <input
             type="text"
             id="name"
+            maxLength={12}
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
             required
@@ -171,12 +172,13 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
 
                   <input
                     type="number"
+                    inputMode="numeric"
                     id="subGroup"
                     min={1}
                     required
                     value={parseInt(member.subGroup)}
                     onChange={(e) => updateGroupMember({ subGroup: e.target.value }, index)}
-                    className="flex items-center shadow appearance-none border rounded w-10 mx-2 py-2 text-sm  text-gray-700 text-center leading-tight focus:outline-red-400 focus:shadow-outline"
+                    className="flex items-center shadow appearance-none border rounded w-10 mx-2 py-2 text-sm text-gray-700 text-center leading-tight focus:outline-red-400 focus:shadow-outline"
                   />
 
                   <FontAwesomeIcon
@@ -196,8 +198,8 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
           <button
             type="submit"
             disabled={isGroupCreated || isGroupCreating}
-            className={`flex justify-center  self-center w-full  text-white font-medium bg-red-500 rounded-lg py-2 m-1 ${
-              isGroupCreating ? "cursor-wait" : isGroupCreated ? "" : "hover:scale-[1.02] hover:shadow-md "
+            className={`btn-red flex justify-center  self-center w-full m-1 ${
+              isGroupCreating ? "cursor-wait" : isGroupCreated ? "" : "hover:scale-2"
             }  `}
           >
             {isGroupCreating ? (

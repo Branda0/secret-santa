@@ -9,10 +9,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <button>deco</button>
         </div>
         <div className="flex flex-col  ">
-          {/* <span className="self-center text-[4rem] text-red-500 leading-none">Secret Santa</span> */}
           <div className=" relative h-[8rem] w-full">
             <Image
-              priority
               fill
               src={"https://3foisrien.shop/wp-content/uploads/2021/11/Sans-titre-3.png"}
               alt="secret santa logo"
