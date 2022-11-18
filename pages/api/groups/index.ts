@@ -1,14 +1,13 @@
-import clientPromise from "../../lib/mongodb";
+import clientPromise from "../../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getAllGroups } from "../../lib/groups";
+import { getAllGroups } from "../../../lib/groups";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const client = await clientPromise;
-    const db = client.db("secret_santa");
-
     switch (req.method) {
       case "POST":
+        const client = await clientPromise;
+        const db = client.db("secret_santa");
         const { name, members } = req.body;
         if (name && members) {
           if (await db.collection("groups").findOne({ name: name })) {
