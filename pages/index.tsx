@@ -3,15 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import { Group } from "../types/types";
+import { GroupType } from "../types/types";
 import { getAllGroups } from "../lib/groups";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../components/Modal";
 import Layout from "../components/Layout";
+import GroupCard from "../components/GroupCard";
 
-export default function Home({ groups }: { groups: Array<Group> }) {
+export default function Home({ groups }: { groups: Array<GroupType> }) {
   const [isLoading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -46,13 +47,11 @@ export default function Home({ groups }: { groups: Array<Group> }) {
             <FontAwesomeIcon icon={faPlus} className="w-4 text-white mr-2" />
             Ajouter un groupe
           </button>
-          <div className=" p-4 text-gray-800 ">
-            <h2 className=" font-semibold text-lg mb-2  ">Rejoind ton groupe !</h2>
-            <section>
+          <div className="flex flex-col p-4">
+            <h2 className=" font-semibold  text-gray-800 text-lg mb-3  ">Rejoins ton groupe !</h2>
+            <section className="flex flex-wrap justify-center gap-3 ">
               {groups.map((group) => (
-                <Link key={group._id} href={`/${group.name}`}>
-                  <h1 className="text-start text">{group.name}</h1>
-                </Link>
+                <GroupCard key={group._id} group={group} />
               ))}
             </section>
           </div>
@@ -64,7 +63,7 @@ export default function Home({ groups }: { groups: Array<Group> }) {
 }
 
 // server side rendering - getting all groups from database on page load
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async () => {
   try {
     const allGroups = await getAllGroups();
 
