@@ -1,71 +1,38 @@
+import { forEachChild } from "typescript";
 import Graph from "./graph";
+import { shuffleArray } from "./utils";
 
-export const computeGraph = () => {
-  try {
-    const g1 = new Graph(8);
+export const computeGraph = (members: { name: string; subGroup: string }[]): string[] => {
+  // const members = [
+  //   { name: "kelly", subGroup: "1" },
+  //   { name: "tania", subGroup: "2" },
+  //   { name: "elsa", subGroup: "3" },
+  //   { name: "mika", subGroup: "3" },
+  //   { name: "gab", subGroup: "3" },
+  // ];
 
-    var nodes = ["Gab", "Els", "Tan", "Hel", "Mik", "Kel", "Hor", "Man"];
+  let shuffledMembers = [...members];
+  shuffleArray(shuffledMembers);
 
-    // adding nodes
-    for (var i = 0; i < nodes.length; i++) {
-      g1.addVertex(nodes[i]);
-    }
-    g1.addEdge("Gab", "Kel");
-    g1.addEdge("Gab", "Hel");
-    g1.addEdge("Gab", "Tan");
-    g1.addEdge("Gab", "Mik");
-    g1.addEdge("Gab", "Man");
+  const graph = new Graph(members.length);
 
-    g1.addEdge("Hor", "Kel");
-    g1.addEdge("Hor", "Mik");
-    g1.addEdge("Hor", "Tan");
-    g1.addEdge("Hor", "Hel");
-    g1.addEdge("Hor", "Man");
+  const nodes = members.map((member) => member.name);
 
-    g1.addEdge("Els", "Kel");
-    g1.addEdge("Els", "Mik");
-    g1.addEdge("Els", "Hel");
-    g1.addEdge("Els", "Tan");
-    g1.addEdge("Els", "Man");
+  // add nodes to graph
+  shuffledMembers.forEach((member) => {
+    graph.addNode(member.name);
+  });
 
-    g1.addEdge("Kel", "Gab");
-    g1.addEdge("Kel", "Els");
-    g1.addEdge("Kel", "Hor");
-    g1.addEdge("Kel", "Hel");
-    g1.addEdge("Kel", "Tan");
-    g1.addEdge("Kel", "Man");
+  // add edges between nodes
+  shuffledMembers.forEach((memberNodeA) => {
+    shuffledMembers
+      .filter((member) => memberNodeA.name !== member.name && memberNodeA.subGroup !== member.subGroup)
+      .forEach((filtredMember) => {
+        graph.addEdge(memberNodeA.name, filtredMember.name);
+      });
+  });
 
-    g1.addEdge("Mik", "Gab");
-    g1.addEdge("Mik", "Hor");
-    g1.addEdge("Mik", "Els");
-    g1.addEdge("Mik", "Hel");
-    g1.addEdge("Mik", "Tan");
-    g1.addEdge("Mik", "Man");
+  graph.printGraph();
 
-    g1.addEdge("Hel", "Gab");
-    g1.addEdge("Hel", "Els");
-    g1.addEdge("Hel", "Hor");
-    g1.addEdge("Hel", "Mik");
-    g1.addEdge("Hel", "Kel");
-
-    g1.addEdge("Tan", "Gab");
-    g1.addEdge("Tan", "Kel");
-    g1.addEdge("Tan", "Hor");
-    g1.addEdge("Tan", "Els");
-    g1.addEdge("Tan", "Mik");
-
-    g1.addEdge("Man", "Gab");
-    g1.addEdge("Man", "Hor");
-    g1.addEdge("Man", "Mik");
-    g1.addEdge("Man", "Els");
-    g1.addEdge("Man", "Kel");
-
-    g1.printGraph();
-
-    return g1.cycleGraph("Gab");
-  } catch (error) {
-    console.log(error);
-  }
+  return graph.cycleGraph(shuffledMembers[0].name);
 };
-
-// adding edges
