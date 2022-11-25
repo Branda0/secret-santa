@@ -84,6 +84,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     setTimeout(() => {
       onClose();
     }, 150);
+    setIsGroupCreated(false);
   };
 
   const handleOverlayClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -134,91 +135,100 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
           />
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col w-full">
-          <label htmlFor="name" className=" px-1 font-medium text-gray-700   ">
-            Groupe
-          </label>
-          <input
-            type="text"
-            id="name"
-            maxLength={12}
-            value={groupName}
-            onChange={(e) => setGroupName(e.target.value)}
-            required
-            placeholder="'Votre nom de groupe'"
-            className="shadow appearance-none border rounded w-full py-2 px-3 mt-1 mb-2 text-sm capitalize text-gray-700 leading-tight focus:outline-red-500 focus:shadow-outline"
-          />
-          <div className="flex items-center mt-3 justify-between">
-            <span className="px-1 font-medium text-gray-700 ">Membres</span>
-
-            <div className=" px-10 ">
-              <Tooltip message={"même chiffre = pas de cadeaux l'un à l'autre"}>
-                <FontAwesomeIcon icon={faCircleInfo} className="w-4  text-red-500 cursor-pointer" />
-              </Tooltip>
-            </div>
-          </div>
-          <div id="members" className="flex flex-col">
-            {groupMembers.map((member, index) => {
-              return (
-                <div className="flex my-1" key={`member-${index}`}>
-                  <input
-                    type="text"
-                    id="name"
-                    value={member.name}
-                    onChange={(e) => updateGroupMember({ name: e.target.value.toLowerCase() }, index)}
-                    placeholder="'Nom du membre'"
-                    className="shadow capitalize appearance-none border rounded w-full py-2 px-3   text-sm  text-gray-700 leading-tight focus:outline-red-400 focus:shadow-outline"
-                  />
-
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    id="subGroup"
-                    min={1}
-                    required
-                    value={parseInt(member.subGroup)}
-                    onChange={(e) => updateGroupMember({ subGroup: e.target.value }, index)}
-                    className="flex items-center shadow appearance-none border rounded w-10 mx-2 py-2 text-sm text-gray-700 text-center leading-tight focus:outline-red-400 focus:shadow-outline"
-                  />
-
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    className="w-4 ml-2 text-red-500 cursor-pointer"
-                    onClick={(e) => handleRemoveMember(index)}
-                  />
-                </div>
-              );
-            })}
-            <FontAwesomeIcon
-              icon={faPlus}
-              className="w-5 m-2 text-red-500 self-center cursor-pointer"
-              onClick={handleAddMemberRow}
+        {!isGroupCreated ? (
+          <form onSubmit={handleSubmit} className="flex flex-col w-full">
+            <label htmlFor="name" className=" px-1 font-medium text-gray-700   ">
+              Groupe
+            </label>
+            <input
+              type="text"
+              id="name"
+              maxLength={12}
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+              required
+              placeholder="'Votre nom de groupe'"
+              className="shadow appearance-none border rounded w-full py-2 px-3 mt-1 mb-2 text-sm capitalize text-gray-700 leading-tight focus:outline-red-500 focus:shadow-outline"
             />
-          </div>
-          <button
-            type="submit"
-            disabled={isGroupCreated || isGroupCreating}
-            className={`btn-red flex justify-center  self-center w-full m-1 ${
-              isGroupCreating ? "cursor-wait" : isGroupCreated ? "" : "hover:scale-2"
-            }  `}
-          >
-            {isGroupCreating ? (
-              <Spinner />
-            ) : isGroupCreated ? (
-              <span className="flex items-center">
-                Groupe bien enregistré <FontAwesomeIcon icon={faCheck} className="w-5 m-2 self-center" />{" "}
-              </span>
-            ) : (
-              <span>Créer mon groupe</span>
-            )}
-          </button>
-          {errorMessage && (
-            <div className="flex items-center mt-3">
-              <FontAwesomeIcon icon={faTriangleExclamation} className="flex w-5 mr-3 text-red-500  " />
-              <span className="text-xs text-red-500">{errorMessage}</span>
+            <div className="flex items-center mt-3 justify-between">
+              <span className="px-1 font-medium text-gray-700 ">Membres</span>
+
+              <div className=" px-10 ">
+                <Tooltip message={"même chiffre = pas de cadeaux l'un à l'autre"}>
+                  <FontAwesomeIcon icon={faCircleInfo} className="w-4  text-red-500 cursor-pointer" />
+                </Tooltip>
+              </div>
             </div>
-          )}
-        </form>
+            <div id="members" className="flex flex-col">
+              {groupMembers.map((member, index) => {
+                return (
+                  <div className="flex my-1" key={`member-${index}`}>
+                    <input
+                      type="text"
+                      id="name"
+                      value={member.name}
+                      onChange={(e) => updateGroupMember({ name: e.target.value.toLowerCase() }, index)}
+                      placeholder="'Nom du membre'"
+                      className="shadow capitalize appearance-none border rounded w-full py-2 px-3   text-sm  text-gray-700 leading-tight focus:outline-red-400 focus:shadow-outline"
+                    />
+
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      id="subGroup"
+                      min={1}
+                      required
+                      value={parseInt(member.subGroup)}
+                      onChange={(e) => updateGroupMember({ subGroup: e.target.value }, index)}
+                      className="flex items-center shadow appearance-none border rounded w-10 mx-2 py-2 text-sm text-gray-700 text-center leading-tight focus:outline-red-400 focus:shadow-outline"
+                    />
+
+                    <FontAwesomeIcon
+                      icon={faXmark}
+                      className="w-4 ml-2 text-red-500 cursor-pointer"
+                      onClick={(e) => handleRemoveMember(index)}
+                    />
+                  </div>
+                );
+              })}
+              <FontAwesomeIcon
+                icon={faPlus}
+                className="w-5 m-2 text-red-500 self-center cursor-pointer"
+                onClick={handleAddMemberRow}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isGroupCreated || isGroupCreating}
+              className={`btn-red flex justify-center  self-center w-full m-1 ${
+                isGroupCreating ? "cursor-wait" : isGroupCreated ? "" : "hover:scale-2"
+              }  `}
+            >
+              {isGroupCreating ? (
+                <Spinner />
+              ) : isGroupCreated ? (
+                <span className="flex items-center">
+                  Groupe bien enregistré <FontAwesomeIcon icon={faCheck} className="w-5 m-2 self-center" />{" "}
+                </span>
+              ) : (
+                <span>Créer mon groupe</span>
+              )}
+            </button>
+            {errorMessage && (
+              <div className="flex items-center mt-3">
+                <FontAwesomeIcon icon={faTriangleExclamation} className="flex w-5 mr-3 text-red-500  " />
+                <span className="text-xs text-red-500">{errorMessage}</span>
+              </div>
+            )}
+          </form>
+        ) : null}
+        {isGroupCreated ? (
+          <div className="btn-red m-2 mt-4">
+            <span className="flex justify-center items-center ">
+              Groupe bien enregistré <FontAwesomeIcon icon={faCheck} className="w-5 m-2 self-center" />{" "}
+            </span>
+          </div>
+        ) : null}
       </div>
     </div>
   );
