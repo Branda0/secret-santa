@@ -29,6 +29,9 @@ module.exports = {
           "50%": { transform: "rotate(3deg)" },
         },
       },
+      minWidth: {
+        24: "24rem",
+      },
     },
   },
   plugins: [],
