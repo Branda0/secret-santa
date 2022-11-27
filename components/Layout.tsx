@@ -41,7 +41,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             />
           </div>
         </div>
-        <div className="self-center flex flex-col w-full px-3 md:w-[70rem]  ">
+        <div className="self-center flex flex-col w-full px-3 md:max-w-[70rem]  ">
           <span className="rounded-t-xl justify-self-center p-3 text-4xl md:text-5xl text-center bg-red-500 text-white font-bold ">
             Secret Santa
           </span>
