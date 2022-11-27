@@ -16,6 +16,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         break;
     }
   } catch (e) {
-    res.status(400).json({ error: { message: "Erreur de création de groupe, veuillez réessayer" } });
+    res.status(400).json({ error: { message: "Error" } });
   }
 };
