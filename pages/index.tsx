@@ -38,8 +38,8 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
               amis ou de la famille ? Commence donc par
               <span className="font-semibold "> créer ton groupe</span>, puis invite chaque participant à
               visiter cette page, chacun pourra alors se
-              <span className="font-semibold "> connecter à son propre espace</span> et connaitre l'identité
-              de son <span className="font-semibold ">secret santa</span>
+              <span className="font-semibold "> connecter à son propre espace</span> et connaitre
+              l&apos;identité de son <span className="font-semibold ">secret santa</span>
             </p>
           </div>
           <button

@@ -41,7 +41,7 @@ const Secret = ({ member }: { member: IMember }) => {
     };
 
     fetchData();
-  });
+  }, [member]);
 
   return (
     <div className="flex flex-col justify-center items-center w-full mt-6 mb-4 sm:min-w-24  ">
@@ -58,7 +58,13 @@ const Secret = ({ member }: { member: IMember }) => {
               </span>
             </p>
           ) : (
-            <p>C'est privée ici ... Oust !</p>
+            <p className="font-medium">
+              C&apos;est{" "}
+              <span className="font-semibold underline underline-offset-4 decoration-2 decoration-red-500 ">
+                privé
+              </span>{" "}
+              ici ... Oust !
+            </p>
           )}
         </div>
       ) : (
