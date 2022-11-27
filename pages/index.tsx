@@ -18,8 +18,6 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
     setShowModal(true);
   };
 
-  console.log("render Home");
-
   return (
     <>
       <Head>

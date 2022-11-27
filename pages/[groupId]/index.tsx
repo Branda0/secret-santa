@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Cookies from "js-cookie";
 import { useState, useEffect, useContext } from "react";
 
 import { UserContext, AppContextInterface } from "../../context/User";
@@ -19,8 +18,6 @@ export default function Group({ group }: { group: IGroup }) {
   const [signupModal, setSignupModal] = useState(false);
   const [secretModal, setSecretModal] = useState(false);
   const [memberCardInfo, setMembercardInfo] = useState<IMember | null>(null);
-
-  useEffect(() => {}, []);
 
   const handleMemberClick = async (member: IMember) => {
     try {

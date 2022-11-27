@@ -3,14 +3,6 @@ import Graph from "./graph";
 import { shuffleArray } from "./utils";
 
 export const computeGraph = (members: { name: string; subGroup: string }[]): string[] => {
-  // const members = [
-  //   { name: "kelly", subGroup: "1" },
-  //   { name: "tania", subGroup: "2" },
-  //   { name: "elsa", subGroup: "3" },
-  //   { name: "mika", subGroup: "3" },
-  //   { name: "gab", subGroup: "3" },
-  // ];
-
   let shuffledMembers = [...members];
   shuffleArray(shuffledMembers);
 

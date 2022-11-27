@@ -4,6 +4,7 @@ import { UserContext, AppContextInterface } from "../context/User";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { IMember } from "../types/types";
+import Spinner from "./Spinner";
 
 const Signup = ({
   member,
@@ -22,7 +23,7 @@ const Signup = ({
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    //APPEL API SIGNUP
+
     setIsSigning(true);
     try {
       const response = await fetch("/api/members/signup", {
@@ -42,6 +43,7 @@ const Signup = ({
         setSecretModal(true);
       } else {
         setSignupError("Erreur lors de la création du compte");
+        setIsSigning(false);
       }
     } catch (error) {
       setSignupError("Erreur lors de la création du compte");
@@ -51,7 +53,7 @@ const Signup = ({
 
   return (
     <div className="flex flex-col w-full sm:min-w-24  ">
-      <h1 className="my-4 self-center text-3xl text-gray-800 font-normal">
+      <h1 className="my-4 text-center text-3xl text-gray-800 font-normal">
         Bienvenue <span className="capitalize">{member.name}</span>
       </h1>
       <form onSubmit={handleSubmit}>
@@ -72,9 +74,16 @@ const Signup = ({
             onClick={() => setPasswordVisibility(!passwordVisibility)}
           />
         </div>
-        <button className="btn-red w-full font-medium" type="submit">
-          Créer mon compte
-        </button>
+
+        {isSigning ? (
+          <div className="flex justify-center my-2">
+            <Spinner size={7} />
+          </div>
+        ) : (
+          <button className="btn-red w-full font-medium" type="submit">
+            Créer mon compte
+          </button>
+        )}
         {signupError ? (
           <div className="flex items-center ml-1 mt-3">
             <FontAwesomeIcon icon={faTriangleExclamation} className="flex w-4 mr-3 text-red-500  " />

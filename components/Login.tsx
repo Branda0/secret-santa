@@ -5,6 +5,7 @@ import { IMember } from "../types/types";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import Spinner from "./Spinner";
 
 const Login = ({
   member,
@@ -23,6 +24,7 @@ const Login = ({
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+
     setIsLogging(true);
     try {
       const response = await fetch("/api/members/login", {
@@ -42,6 +44,7 @@ const Login = ({
         setSecretModal(true);
       } else {
         setLoginError("Erreur de connexion");
+        setIsLogging(false);
       }
     } catch (error) {
       setLoginError("Erreur de connexion");
@@ -51,7 +54,7 @@ const Login = ({
 
   return (
     <div className="flex flex-col w-full sm:min-w-24  ">
-      <h1 className="my-4 self-center text-3xl text-gray-700 font-normal">
+      <h1 className="my-4 text-center text-3xl text-gray-700 font-normal">
         Bienvenue <span className="capitalize">{member.name}</span>
       </h1>
       <form onSubmit={handleSubmit}>
@@ -71,9 +74,15 @@ const Login = ({
             onClick={() => setPasswordVisibility(!passwordVisibility)}
           />
         </div>
-        <button className="btn-red w-full font-medium" type="submit">
-          Se connecter
-        </button>
+        {isLogging ? (
+          <div className="flex justify-center my-2">
+            <Spinner size={7} />
+          </div>
+        ) : (
+          <button className="btn-red w-full font-medium" type="submit">
+            Se connecter
+          </button>
+        )}
         {loginError ? (
           <div className="flex items-center ml-1 mt-3">
             <FontAwesomeIcon icon={faTriangleExclamation} className="flex w-4 mr-3 text-red-500  " />

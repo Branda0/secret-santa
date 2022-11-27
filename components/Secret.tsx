@@ -1,9 +1,7 @@
 import Cookies from "js-cookie";
 import { useState, useContext, useEffect } from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
-import { IMember, IUser } from "../types/types";
+import { IMember } from "../types/types";
 import Spinner from "./Spinner";
 
 const Secret = ({ member }: { member: IMember }) => {

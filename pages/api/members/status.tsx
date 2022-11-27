@@ -2,11 +2,10 @@ import clientPromise from "../../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { ObjectId } from "mongodb";
-import Member from "../../[groupId]/[memberId]";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { id } = req.query; // dynamic id for group specific endpoint
+    const id = req.query.id as string; // dynamic id for group specific endpoint
     const client = await clientPromise;
     const db = client.db("secret_santa");
 

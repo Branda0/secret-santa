@@ -5,8 +5,6 @@ import Cookies from "js-cookie";
 
 export interface AppContextInterface {
   isLogged: boolean;
-  // setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
-  // user: { userId: string; userToken: string };
   updateName: (name: string | null) => void;
   updateToken: (name: string | null) => void;
 }
@@ -15,10 +13,6 @@ export const UserContext = createContext<AppContextInterface | null>(null);
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLogged, setIsLogged] = useState<boolean>(Cookies.get("santa-userToken") ? true : false);
-  // const [user, setUser] = useState<IUser>({
-  //   userId: "",
-  //   userToken: "",
-  // });
 
   const updateToken = (token: string | null) => {
     if (token) {
@@ -28,7 +22,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       Cookies.remove("santa-userToken");
       setIsLogged(false);
     }
-    // setUser({ ...user, userToken: token });
   };
 
   const updateName = (userId: string | null) => {
@@ -37,7 +30,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     } else {
       Cookies.remove("santa-userId");
     }
-    // setUser({ ...user, userId: name });
   };
 
   return (

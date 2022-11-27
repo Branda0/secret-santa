@@ -1,31 +1,16 @@
-import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/router";
-import Image from "next/image";
+import { useRef } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faRectangleXmark,
-  faXmark,
-  faPlus,
-  faCircleInfo,
-  faTriangleExclamation,
-  faCheck,
-} from "@fortawesome/free-solid-svg-icons";
-
-import Tooltip from "./Tooltip";
-import Spinner from "./Spinner";
+import { faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
 
 const ModalWrapper = ({ children, onClose }: { children: React.ReactNode; onClose: () => void }) => {
-  console.log("render Modal");
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const router = useRouter();
 
   const handleClose = () => {
     if (modalRef.current) {
       modalRef.current.classList.remove("animate-fadeIn");
       modalRef.current.classList.add("animate-fadeOut");
     }
-
     setTimeout(() => {
       onClose();
     }, 150);

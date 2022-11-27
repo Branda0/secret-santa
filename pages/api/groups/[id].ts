@@ -1,4 +1,3 @@
-import clientPromise from "../../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getGroup } from "../../../lib/groups";
 
