@@ -105,9 +105,7 @@ export default function Group({ group }: { group: IGroup }) {
 // server side rendering - getting all groups from database on page load
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   try {
-    const { params } = context;
-
-    const { groupId } = params;
+    const groupId = context.params?.groupId as string;
 
     const group = await getGroup(groupId);
 
