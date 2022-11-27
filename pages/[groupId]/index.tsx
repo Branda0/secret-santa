@@ -1,17 +1,54 @@
 import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+import { useState, useEffect, useContext } from "react";
+
+import { UserContext, AppContextInterface } from "../../context/User";
+
+import { IGroup, IMember } from "../../types/types";
 import { getGroup } from "../../lib/groups";
 
-// import { Group } from "../../types/types";
+import ModalWrapper from "../../components/ModalWrapper";
+import Login from "../../components/Login";
+import Signup from "../../components/Signup";
+import Secret from "../../components/Secret";
 import Layout from "../../components/Layout";
-import { GroupType } from "../../types/types";
 
-export default function Group({ group }: { group: GroupType }) {
-  const router = useRouter();
-  const query = router.query;
+export default function Group({ group }: { group: IGroup }) {
+  const { isLogged, updateName } = useContext(UserContext) as AppContextInterface;
+  const [loginModal, setLoginModal] = useState(false);
+  const [signupModal, setSignupModal] = useState(false);
+  const [secretModal, setSecretModal] = useState(false);
+  const [memberCardInfo, setMembercardInfo] = useState<IMember | null>(null);
 
-  console.log(group);
+  useEffect(() => {}, []);
+
+  const handleMemberClick = async (member: IMember) => {
+    try {
+      setMembercardInfo(member);
+      const response = await fetch(`/api/members/status?id=${member._id}`, {
+        method: "GET",
+      });
+
+      const memberStatus = await response.json();
+
+      if (response.status == 200) {
+        if (memberStatus.status === "signed") {
+          if (isLogged) {
+            setSecretModal(true);
+          } else {
+            setLoginModal(true);
+          }
+        } else {
+          setSignupModal(true);
+        }
+      } else {
+        alert("Erreur de connexion au serveur");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Erreur de connexion au serveur");
+    }
+  };
 
   return (
     <>
@@ -21,51 +58,69 @@ export default function Group({ group }: { group: GroupType }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <p>YOYO </p>
-        {/* {groupData?.members.map((member, index) => {
-        return (
-          <Link
-            key={member.id}
-            href={{
-              pathname: "[group]/[member]",
-              query: {
-                member: member.name,
-                memberId: member.id,
-                groupName: groupName,
-              },
-            }}
-            as={`${groupName}/${member.name}`}
-          >
-            {member.name}
-          </Link>
-        );
-      })} */}
+        <div className="mt-10 mb-8 text-gray-800 ">
+          <h2 className=" font-medium text-center text-lg mb-2  ">
+            Découvres ton <span className="font-bold text-red-500">Secret Santa </span> ...
+          </h2>
+        </div>
+        <section className="flex flex-wrap justify-center gap-3 ">
+          {group.members.map((member) => (
+            <button
+              key={`member${member.name}`}
+              className="flex flex-1 flex-col gap-2 justify-center items-center rounded-md max-w-[11rem] min-w-[9rem] shadow-lg p-4 bg-red-500"
+              onClick={() => handleMemberClick(member)}
+            >
+              <span className="text-white capitalize font-medium">{member.name}</span>
+            </button>
+          ))}
+        </section>
+        {loginModal ? (
+          <ModalWrapper onClose={() => setLoginModal(false)}>
+            <Login
+              member={memberCardInfo as IMember}
+              closeLogin={() => setLoginModal(false)}
+              setSecretModal={setSecretModal}
+            />
+          </ModalWrapper>
+        ) : null}
+        {signupModal ? (
+          <ModalWrapper onClose={() => setSignupModal(false)}>
+            <Signup
+              member={memberCardInfo as IMember}
+              closeSignup={() => setLoginModal(false)}
+              setSecretModal={setSecretModal}
+            />
+          </ModalWrapper>
+        ) : null}
+        {secretModal ? (
+          <ModalWrapper onClose={() => setSecretModal(false)}>
+            <Secret member={memberCardInfo as IMember} />
+          </ModalWrapper>
+        ) : null}
       </Layout>
     </>
   );
 }
 
 // server side rendering - getting all groups from database on page load
-export const getServerSideProps = async (contex) => {
-  const { groupId } = contex.params;
-  console.log("+++++++++++++++++=");
-  console.log(contex.params);
-  console.log(groupId);
-  return {
-    notFound: true,
-  };
+export const getServerSideProps = async ({ params }) => {
+  const { groupId } = params;
 
   try {
     const group = await getGroup(groupId);
-    console.log(group);
 
+    if (!group) {
+      return {
+        notFound: true,
+      };
+    }
     return {
       props: { group: JSON.parse(JSON.stringify(group)) },
     };
   } catch (e) {
-    console.error(e);
     return {
       notFound: true,
     };
+    // }
   }
 };

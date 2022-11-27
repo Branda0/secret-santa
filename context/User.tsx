@@ -1,23 +1,47 @@
 import { useState, createContext } from "react";
+import { IUser } from "../types/types";
 
-interface AppContextInterface {
+import Cookies from "js-cookie";
+
+export interface AppContextInterface {
   isLogged: boolean;
-  setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
-  user: { userId: string; userToken: string };
-  setUser?: React.Dispatch<React.SetStateAction<{ userId: string; userToken: string }>>;
+  // setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
+  // user: { userId: string; userToken: string };
+  updateName: (name: string | null) => void;
+  updateToken: (name: string | null) => void;
 }
 
 export const UserContext = createContext<AppContextInterface | null>(null);
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isLogged, setIsLogged] = useState<boolean>(true);
-  const [user, setUser] = useState<{ userId: string; userToken: string }>({
-    userId: "",
-    userToken: "",
-  });
+  const [isLogged, setIsLogged] = useState<boolean>(Cookies.get("santa-userToken") ? true : false);
+  // const [user, setUser] = useState<IUser>({
+  //   userId: "",
+  //   userToken: "",
+  // });
+
+  const updateToken = (token: string | null) => {
+    if (token) {
+      Cookies.set("santa-userToken", token, { expires: 7 });
+      setIsLogged(true);
+    } else {
+      Cookies.remove("santa-userToken");
+      setIsLogged(false);
+    }
+    // setUser({ ...user, userToken: token });
+  };
+
+  const updateName = (userId: string | null) => {
+    if (userId) {
+      Cookies.set("santa-userId", userId, { expires: 7 });
+    } else {
+      Cookies.remove("santa-userId");
+    }
+    // setUser({ ...user, userId: name });
+  };
 
   return (
-    <UserContext.Provider value={{ isLogged, setIsLogged, user, setUser }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ isLogged, updateName, updateToken }}>{children}</UserContext.Provider>
   );
 };
 
