@@ -17,12 +17,15 @@ import Spinner from "./Spinner";
 
 const ModalWrapper = ({ children, onClose }: { children: React.ReactNode; onClose: () => void }) => {
   console.log("render Modal");
-  const modalRef = useRef(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
   const handleClose = () => {
-    modalRef.current.classList.remove("animate-fadeIn");
-    modalRef.current.classList.add("animate-fadeOut");
+    if (modalRef.current) {
+      modalRef.current.classList.remove("animate-fadeIn");
+      modalRef.current.classList.add("animate-fadeOut");
+    }
+
     setTimeout(() => {
       onClose();
     }, 150);
