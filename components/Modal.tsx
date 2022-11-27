@@ -64,7 +64,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
       const groups = await response.json();
 
       // if update succeded reload page to get fresh SSR data
-      if (response.status == 200) {
+      if (response.status === 200) {
         setIsGroupCreated(true);
         router.replace(router.asPath);
       } else {
@@ -120,7 +120,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     <div
       id="modal-wrapper"
       className=" fixed inset-0 bg-opacity-25 bg-black
-     backdrop-blur flex flex-col items-center justify-center px-3 sm:px-5 "
+     backdrop-blur flex flex-col items-center justify-center px-3 "
       onClick={handleOverlayClick}
     >
       <div
@@ -154,7 +154,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
               <span className="px-1 font-medium text-gray-700 ">Membres</span>
 
               <div className=" px-10 ">
-                <Tooltip message={"même chiffre = pas de cadeaux l'un à l'autre"}>
+                <Tooltip message={"Pas de cadeaux mutuels si même n°"}>
                   <FontAwesomeIcon icon={faCircleInfo} className="w-4  text-red-500 cursor-pointer" />
                 </Tooltip>
               </div>
@@ -205,7 +205,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
               }  `}
             >
               {isGroupCreating ? (
-                <Spinner />
+                <Spinner size={8} />
               ) : isGroupCreated ? (
                 <span className="flex items-center">
                   Groupe bien enregistré <FontAwesomeIcon icon={faCheck} className="w-5 m-2 self-center" />{" "}
@@ -214,16 +214,16 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
                 <span>Créer mon groupe</span>
               )}
             </button>
-            {errorMessage && (
+            {errorMessage ? (
               <div className="flex items-center mt-3">
-                <FontAwesomeIcon icon={faTriangleExclamation} className="flex w-5 mr-3 text-red-500  " />
+                <FontAwesomeIcon icon={faTriangleExclamation} className="flex w-4 mr-3 text-red-500  " />
                 <span className="text-xs text-red-500">{errorMessage}</span>
               </div>
-            )}
+            ) : null}
           </form>
         ) : null}
         {isGroupCreated ? (
-          <div className="btn-red m-2 mt-4">
+          <div className="btn-red m-2 mt-4 ml-1">
             <span className="flex justify-center items-center ">
               Groupe bien enregistré <FontAwesomeIcon icon={faCheck} className="w-5 m-2 self-center" />{" "}
             </span>

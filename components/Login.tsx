@@ -1,31 +1,66 @@
-import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/router";
-import Image from "next/image";
+import { useState, useContext } from "react";
+
+import { UserContext, AppContextInterface } from "../context/User";
+import { IMember } from "../types/types";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
-const Login = () => {
+const Login = ({
+  member,
+  closeLogin,
+  setSecretModal,
+}: {
+  member: IMember;
+  closeLogin: () => void;
+  setSecretModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const { updateName, updateToken } = useContext(UserContext) as AppContextInterface;
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [password, setPassword] = useState("");
+  const [isLogging, setIsLogging] = useState(false);
 
-  const handleSubmit = () => {
-    // APPEL API LOGIN
+  const handleSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setIsLogging(true);
+    try {
+      const response = await fetch("/api/members/login", {
+        method: "POST",
+        body: JSON.stringify({ id: member._id, password: password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        const memberData = await response.json();
+        updateName(memberData.name);
+        updateToken(memberData.account.token);
+        setIsLogging(false);
+        closeLogin();
+        setSecretModal(true);
+      } else {
+        setLoginError("Erreur de connexion");
+      }
+    } catch (error) {
+      setLoginError("Erreur de connexion");
+      setIsLogging(false);
+    }
   };
 
-  const member = { name: "Gabriel" };
   return (
     <div className="flex flex-col w-full sm:min-w-24  ">
-      <h1 className="my-4 self-center text-3xl text-gray-800 font-medium">
+      <h1 className="my-4 self-center text-3xl text-gray-700 font-normal">
         Bienvenue <span className="capitalize">{member.name}</span>
       </h1>
       <form onSubmit={handleSubmit}>
         <div className="flex relative">
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 my-2 text-sm capitalize text-gray-700 leading-tight focus:outline-red-500 focus:shadow-outline "
+            className="shadow appearance-none border rounded w-full py-2 px-3 my-2 text-sm text-gray-700 leading-tight focus:outline-red-500 focus:shadow-outline "
             type={passwordVisibility ? "text" : "password"}
             placeholder="Mot de passe"
+            required
             onChange={(event) => {
               setPassword(event.target.value);
             }}
@@ -36,10 +71,15 @@ const Login = () => {
             onClick={() => setPasswordVisibility(!passwordVisibility)}
           />
         </div>
-        {loginError && <span className="error-msg">fdfdf{loginError}</span>}
-        <button className="btn-red w-full font" type="submit">
+        <button className="btn-red w-full font-medium" type="submit">
           Se connecter
         </button>
+        {loginError ? (
+          <div className="flex items-center ml-1 mt-3">
+            <FontAwesomeIcon icon={faTriangleExclamation} className="flex w-4 mr-3 text-red-500  " />
+            <span className="text-xs text-red-500">{loginError}</span>
+          </div>
+        ) : null}
       </form>
     </div>
   );
