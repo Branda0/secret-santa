@@ -14,7 +14,7 @@ const Secret = ({ member }: { member: IMember }) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsFetching(true);
-      console.log("fetch ID ", member._id);
+
       try {
         const response = await fetch(`/api/members/${member._id}`, {
           method: "GET",
@@ -41,7 +41,7 @@ const Secret = ({ member }: { member: IMember }) => {
     };
 
     fetchData();
-  }, []);
+  });
 
   return (
     <div className="flex flex-col justify-center items-center w-full mt-6 mb-4 sm:min-w-24  ">

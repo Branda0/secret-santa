@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getAllGroups } from "../../../lib/groups";
 import { computeGraph } from "../../../lib/compute";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     switch (req.method) {
       case "POST":
@@ -76,4 +76,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log(e);
     res.status(400).json({ error: { message: "Error" } });
   }
-};
+}

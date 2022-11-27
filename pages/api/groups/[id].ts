@@ -2,7 +2,7 @@ import clientPromise from "../../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getGroup } from "../../../lib/groups";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { id } = req.query; // dynamic id for group specific endpoint
 
@@ -18,4 +18,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (e) {
     res.status(400).json({ error: { message: "Error" } });
   }
-};
+}

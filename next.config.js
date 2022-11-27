@@ -10,7 +10,7 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "3foisrien.shop",
-        port: "",
+        // port: "",
         pathname: "/wp-content/**",
       },
     ],

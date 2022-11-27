@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { ObjectId } from "mongodb";
 // import { getGroup } from "../../../lib/groups";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { id } = req.query; // dynamic id for group specific endpoint
     const authToken = req?.headers?.authorization?.replace("Bearer ", "");
@@ -40,4 +40,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (e) {
     res.status(400).json({ error: { message: "Error" } });
   }
-};
+}
