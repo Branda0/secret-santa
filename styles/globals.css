@@ -7,7 +7,7 @@
 }
 
 .btn-red {
-  @apply text-white bg-red-500 focus:outline  font-medium rounded-md px-1 py-2 hover:shadow-md hover:bg-red-600 duration-200;
+  @apply text-white bg-red-500 focus:outline rounded-md py-2 hover:shadow-md hover:bg-red-600 duration-200;
 }
 /*
 html,

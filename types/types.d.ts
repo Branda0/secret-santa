@@ -9,16 +9,17 @@ export interface IGroup {
 export interface IMember {
   _id: ObjectId;
   name: string;
+  group: string;
   subGroup: string;
   secret?: string;
-  account?: {
-    hash?: string;
-    salt?: string;
-    token?: string;
+  account: {
+    hash: string;
+    salt: string;
+    token: string;
   };
 }
 
 export interface IUser {
-  userId: string;
-  token: string;
+  userId?: string;
+  userToken?: string;
 }
