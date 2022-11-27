@@ -17,7 +17,7 @@ import Spinner from "./Spinner";
 
 const Modal = ({ onClose }: { onClose: () => void }) => {
   console.log("render Modal");
-  const modalRef = useRef(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
   const [groupName, setGroupName] = useState<string>("");
@@ -79,8 +79,10 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
   };
 
   const handleClose = () => {
-    modalRef.current.classList.remove("animate-fadeIn");
-    modalRef.current.classList.add("animate-fadeOut");
+    if (modalRef.current) {
+      modalRef.current.classList.remove("animate-fadeIn");
+      modalRef.current.classList.add("animate-fadeOut");
+    }
     setTimeout(() => {
       onClose();
     }, 150);

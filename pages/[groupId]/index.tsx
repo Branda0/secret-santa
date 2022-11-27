@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { useState, useEffect, useContext } from "react";
 
 import { UserContext, AppContextInterface } from "../../context/User";
-
+import { GetServerSidePropsContext } from "next";
 import { IGroup, IMember } from "../../types/types";
 import { getGroup } from "../../lib/groups";
 
@@ -103,10 +103,12 @@ export default function Group({ group }: { group: IGroup }) {
 }
 
 // server side rendering - getting all groups from database on page load
-export const getServerSideProps = async ({ params }) => {
-  const { groupId } = params;
-
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   try {
+    const { params } = context;
+
+    const { groupId } = params;
+
     const group = await getGroup(groupId);
 
     if (!group) {
