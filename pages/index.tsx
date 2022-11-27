@@ -1,9 +1,7 @@
 import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 
-import { GroupType } from "../types/types";
+import { IGroup } from "../types/types";
 import { getAllGroups } from "../lib/groups";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +10,7 @@ import Modal from "../components/Modal";
 import Layout from "../components/Layout";
 import GroupCard from "../components/GroupCard";
 
-export default function Home({ groups }: { groups: Array<GroupType> }) {
+export default function Home({ groups }: { groups: Array<IGroup> }) {
   const [isLoading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -29,15 +27,19 @@ export default function Home({ groups }: { groups: Array<GroupType> }) {
         <meta name="description" content="secret santa home page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <Layout>
         <div className="flex flex-col ">
-          <div className=" p-4 text-gray-800 ">
-            <h2 className=" font-semibold text-lg mb-2  ">Comment ça marche ?</h2>
+          <div className=" text-gray-700 my-5">
+            <h2 className=" font-bold text-lg mb-5 text-center underline underline-offset-8 decoration-2 decoration-red-500 md:text-left ">
+              Comment ça marche ?
+            </h2>
             <p className="text-justify ">
-              Tu cherches à organiser un échange de cadeaux avec tes amis ou de la famille ? Commence donc par
-              créer ton groupe, puis invite chaque participant à visiter cette page, chacun pourra alors se
-              connecter à son propre espace et connaitre l'identité de son "secret santa"
+              Tu cherches à organiser un <span className="font-semibold ">échange de cadeaux</span> avec tes
+              amis ou de la famille ? Commence donc par{" "}
+              <span className="font-semibold ">créer ton groupe</span>, puis invite chaque participant à
+              visiter cette page, chacun pourra alors se
+              <span className="font-semibold "> connecter à son propre espace</span> et connaitre l'identité
+              de son <span className="font-semibold ">secret santa</span>
             </p>
           </div>
           <button
@@ -47,16 +49,19 @@ export default function Home({ groups }: { groups: Array<GroupType> }) {
             <FontAwesomeIcon icon={faPlus} className="w-4 text-white mr-2" />
             Ajouter un groupe
           </button>
-          <div className="flex flex-col p-4">
-            <h2 className=" font-semibold  text-gray-800 text-lg mb-3  ">Rejoins ton groupe !</h2>
+          <div className="flex flex-col mt-10 ">
+            <h2 className=" font-bold  text-center text-gray-700 text-lg mb-5 underline underline-offset-8 decoration-2 decoration-red-500  md:text-left  ">
+              Rejoins ton groupe !
+            </h2>
             <section className="flex flex-wrap justify-center gap-3 ">
               {groups.map((group) => (
-                <GroupCard key={group._id} group={group} />
+                <GroupCard key={`group-${group._id}`} group={group} />
               ))}
             </section>
           </div>
         </div>
       </Layout>
+
       {showModal && <Modal onClose={() => setShowModal(false)} />}
     </>
   );
