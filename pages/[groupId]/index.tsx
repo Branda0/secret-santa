@@ -7,6 +7,7 @@ import { IGroup, IMember } from "../../types/types";
 import { getGroup } from "../../lib/groups";
 
 import ModalWrapper from "../../components/ModalWrapper";
+import Spinner from "../../components/Spinner";
 import Login from "../../components/Login";
 import Signup from "../../components/Signup";
 import Secret from "../../components/Secret";
@@ -23,6 +24,7 @@ export default function Group({ group }: { group: IGroup }) {
   const handleMemberClick = async (member: IMember) => {
     try {
       setIsLoading(true);
+      console.log("TEST");
       setMembercardInfo(member);
       const response = await fetch(`/api/members/status?id=${member._id}`, {
         method: "GET",
@@ -30,25 +32,21 @@ export default function Group({ group }: { group: IGroup }) {
 
       const memberStatus = await response.json();
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         if (memberStatus.status === "signed") {
           if (isLogged) {
-            setIsLoading(false);
             setSecretModal(true);
           } else {
-            setIsLoading(false);
             setLoginModal(true);
           }
         } else {
-          setIsLoading(false);
           setSignupModal(true);
         }
-      } else {
-        alert("Erreur de connexion au serveur");
       }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
-      alert("Erreur de connexion au serveur");
+      setIsLoading(false);
     }
   };
 
@@ -59,6 +57,8 @@ export default function Group({ group }: { group: IGroup }) {
       setSignupModal(false);
     } else if (secretModal) {
       setSecretModal(false);
+    } else if (isLoading) {
+      setIsLoading(false);
     }
   };
 
@@ -87,8 +87,13 @@ export default function Group({ group }: { group: IGroup }) {
           ))}
         </section>
 
-        {loginModal || secretModal || signupModal ? (
+        {loginModal || secretModal || signupModal || isLoading ? (
           <ModalWrapper onClose={handleModalClose}>
+            {isLoading ? (
+              <div className="flex justify-center mt-6 mb-4 w-full sm:min-w-24 ">
+                <Spinner size={7} />
+              </div>
+            ) : null}
             {loginModal ? (
               <Login
                 member={memberCardInfo as IMember}

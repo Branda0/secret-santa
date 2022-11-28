@@ -66,7 +66,7 @@ const Secret = ({ member }: { member: IMember }) => {
           )}
         </div>
       ) : (
-        <Spinner size={10} />
+        <Spinner size={7} />
       )}
     </div>
   );
