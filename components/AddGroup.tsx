@@ -111,11 +111,11 @@ const AddGroup = () => {
             type="text"
             id="name"
             maxLength={12}
-            value={groupName}
-            onChange={(e) => setGroupName(e.target.value)}
+            value={`${groupName.charAt(0).toUpperCase()}${groupName.slice(1)}`}
+            onChange={(e) => setGroupName(e.target.value.toLowerCase())}
             required
-            placeholder="'Votre nom de groupe'"
-            className="shadow appearance-none border rounded w-full py-2 px-3 mt-1 mb-2 text-sm capitalize text-gray-700 leading-tight focus:outline-red-500 focus:shadow-outline"
+            placeholder="Votre nom de groupe"
+            className="shadow appearance-none border rounded w-full py-2 px-3 mt-1 mb-2 text-sm text-gray-700 leading-tight focus:outline-red-500 focus:shadow-outline"
           />
           <div className="flex items-center mt-3 justify-between">
             <span className="px-1 font-medium text-gray-700 ">Membres</span>
@@ -133,10 +133,10 @@ const AddGroup = () => {
                   <input
                     type="text"
                     id="name"
-                    value={member.name}
+                    value={`${member.name.charAt(0).toUpperCase()}${member.name.slice(1)}`}
                     onChange={(e) => updateGroupMember({ name: e.target.value.toLowerCase() }, index)}
-                    placeholder="'Nom du membre'"
-                    className="shadow capitalize appearance-none border rounded w-full py-2 px-3   text-sm  text-gray-700 leading-tight focus:outline-red-400 focus:shadow-outline"
+                    placeholder="Nom du membre"
+                    className="shadow appearance-none border rounded w-full py-2 px-3   text-sm  text-gray-700 leading-tight focus:outline-red-400 focus:shadow-outline"
                   />
 
                   <input
@@ -178,7 +178,7 @@ const AddGroup = () => {
                 Groupe bien enregistré <FontAwesomeIcon icon={faCheck} className="w-5 m-2 self-center" />{" "}
               </span>
             ) : (
-              <span>Créer mon groupe</span>
+              <span className="font-medium">Créer mon groupe</span>
             )}
           </button>
           {errorMessage ? (
@@ -191,8 +191,8 @@ const AddGroup = () => {
       ) : null}
       {isGroupCreated ? (
         <div className="btn-red m-2 mt-4 ml-1">
-          <span className="flex justify-center items-center ">
-            Groupe bien enregistré <FontAwesomeIcon icon={faCheck} className="w-5 m-2 self-center" />{" "}
+          <span className="flex font-medium justify-center items-center ">
+            Groupe bien enregistré <FontAwesomeIcon icon={faCheck} className=" w-5 m-2 self-center" />{" "}
           </span>
         </div>
       ) : null}
