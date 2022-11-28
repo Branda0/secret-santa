@@ -48,7 +48,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </header>
 
-      <main className={" flex-2 flex-col self-center max-w-4xl px-3 sm:px-10 m-auto my-3 "}>{children}</main>
+      <main className={" flex-2 flex-col self-center max-w-4xl px-4 sm:px-10 m-auto my-3 "}>{children}</main>
       <footer className="mt-auto w-full "></footer>
     </div>
   );

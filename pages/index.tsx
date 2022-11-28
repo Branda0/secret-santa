@@ -31,9 +31,9 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
             <h2 className=" font-bold text-lg mb-5 text-center underline underline-offset-8 decoration-2 decoration-red-500 md:text-left ">
               Comment ça marche ?
             </h2>
-            <p className="text-justify ">
+            <p className="text-center px-6">
               Tu cherches à organiser un <span className="font-semibold ">échange de cadeaux</span> avec tes
-              amis ou de la famille ? Commence donc par
+              amis ou de la famille ?<br /> Commence donc par
               <span className="font-semibold "> créer ton groupe</span>, puis invite chaque participant à
               visiter cette page, chacun pourra alors se
               <span className="font-semibold "> connecter à son propre espace</span> et connaitre
@@ -41,7 +41,7 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
             </p>
           </div>
           <button
-            className=" self-center flex justify-center items-center w-1/2 btn-red"
+            className="btn-red self-center flex justify-center items-center p-6 "
             onClick={handleAddModal}
           >
             <FontAwesomeIcon icon={faPlus} className="w-4 text-white mr-2" />
