@@ -6,17 +6,14 @@ import { getAllGroups } from "../lib/groups";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import Modal from "../components/Modal";
+
+import AddGroup from "../components/AddGroup";
+import ModalWrapper from "../components/ModalWrapper";
 import Layout from "../components/Layout";
 import GroupCard from "../components/GroupCard";
 
 export default function Home({ groups }: { groups: Array<IGroup> }) {
-  const [isLoading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-
-  const handleAddModal = () => {
-    setShowModal(true);
-  };
+  const [addGroupModal, setAddGroupModal] = useState(false);
 
   return (
     <>
@@ -42,7 +39,7 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
           </div>
           <button
             className="btn-red self-center flex justify-center items-center p-6 "
-            onClick={handleAddModal}
+            onClick={() => setAddGroupModal(true)}
           >
             <FontAwesomeIcon icon={faPlus} className="w-4 text-white mr-2" />
             Ajouter un groupe
@@ -59,8 +56,11 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
           </div>
         </div>
       </Layout>
-
-      {showModal && <Modal onClose={() => setShowModal(false)} />}
+      {addGroupModal ? (
+        <ModalWrapper onClose={() => setAddGroupModal(false)}>
+          <AddGroup />
+        </ModalWrapper>
+      ) : null}
     </>
   );
 }
