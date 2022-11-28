@@ -53,6 +53,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <a
           href="https://github.com/Branda0/secret-santa"
           target="_blank"
+          rel="noreferrer"
           className="pt-2 pb-1 text-white text-xs cursor-pointer"
         >
           Gabriel Brandao • 2022

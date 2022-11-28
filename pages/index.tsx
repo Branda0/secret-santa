@@ -19,7 +19,7 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
     <>
       <Head>
         <title>Secret Santa</title>
-        <meta name="description" content="secret santa home page" />
+        <meta name="description" content="Secret Santa Home" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
