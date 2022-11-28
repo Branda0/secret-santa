@@ -9,6 +9,13 @@
 .btn-red {
   @apply text-white bg-red-500 focus:outline rounded-md py-2 hover:shadow-md hover:bg-red-600 duration-200;
 }
+
+.snow-bg {
+  background-color: #f9ada0;
+  background-size: contain;
+  padding-block: 3em 5em;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5vw), 0 100%);
+}
 /*
 html,
 body {

@@ -133,6 +133,7 @@ const AddGroup = () => {
                   <input
                     type="text"
                     id="name"
+                    maxLength={14}
                     value={`${member.name.charAt(0).toUpperCase()}${member.name.slice(1)}`}
                     onChange={(e) => updateGroupMember({ name: e.target.value.toLowerCase() }, index)}
                     placeholder="Nom du membre"
@@ -172,7 +173,7 @@ const AddGroup = () => {
             }  `}
           >
             {isGroupCreating ? (
-              <Spinner size={8} />
+              <Spinner size={5} />
             ) : isGroupCreated ? (
               <span className="flex items-center">
                 Groupe bien enregistré <FontAwesomeIcon icon={faCheck} className="w-5 m-2 self-center" />{" "}

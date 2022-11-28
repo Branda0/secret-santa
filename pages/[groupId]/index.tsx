@@ -64,7 +64,7 @@ export default function Group({ group }: { group: IGroup }) {
           {group.members.map((member) => (
             <button
               key={`member${member.name}`}
-              className="flex flex-1 flex-col gap-2 justify-center items-center rounded-md max-w-[11rem] min-w-[9rem] shadow-lg p-4 bg-red-500"
+              className="flex flex-col gap-2 justify-center items-center rounded-md min-w-[9rem] shadow-lg p-4 bg-red-500 border-2 border-transparent hover:border-red-700"
               onClick={() => handleMemberClick(member)}
             >
               <span className="text-white capitalize font-medium">{member.name}</span>

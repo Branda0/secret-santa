@@ -18,7 +18,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   };
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="flex flex-col  bg-[#F9ADA0] p-2 pb-0 ">
+      <header className="flex flex-col  bg-[#F9ADA0] p-2 pb-0">
         {isLogged ? (
           <div className=" flex items-center self-end absolute">
             <FontAwesomeIcon icon={faUser} className="w-3 mr-2   text-white" />
