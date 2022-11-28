@@ -18,9 +18,11 @@ export default function Group({ group }: { group: IGroup }) {
   const [signupModal, setSignupModal] = useState(false);
   const [secretModal, setSecretModal] = useState(false);
   const [memberCardInfo, setMembercardInfo] = useState<IMember | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleMemberClick = async (member: IMember) => {
     try {
+      setIsLoading(true);
       setMembercardInfo(member);
       const response = await fetch(`/api/members/status?id=${member._id}`, {
         method: "GET",
@@ -31,11 +33,14 @@ export default function Group({ group }: { group: IGroup }) {
       if (response.status == 200) {
         if (memberStatus.status === "signed") {
           if (isLogged) {
+            setIsLoading(false);
             setSecretModal(true);
           } else {
+            setIsLoading(false);
             setLoginModal(true);
           }
         } else {
+          setIsLoading(false);
           setSignupModal(true);
         }
       } else {
@@ -44,6 +49,16 @@ export default function Group({ group }: { group: IGroup }) {
     } catch (error) {
       console.log(error);
       alert("Erreur de connexion au serveur");
+    }
+  };
+
+  const handleModalClose = () => {
+    if (loginModal) {
+      setLoginModal(false);
+    } else if (signupModal) {
+      setSignupModal(false);
+    } else if (secretModal) {
+      setSecretModal(false);
     }
   };
 
@@ -71,27 +86,24 @@ export default function Group({ group }: { group: IGroup }) {
             </button>
           ))}
         </section>
-        {loginModal ? (
-          <ModalWrapper onClose={() => setLoginModal(false)}>
-            <Login
-              member={memberCardInfo as IMember}
-              closeLogin={() => setLoginModal(false)}
-              setSecretModal={setSecretModal}
-            />
-          </ModalWrapper>
-        ) : null}
-        {signupModal ? (
-          <ModalWrapper onClose={() => setSignupModal(false)}>
-            <Signup
-              member={memberCardInfo as IMember}
-              closeSignup={() => setLoginModal(false)}
-              setSecretModal={setSecretModal}
-            />
-          </ModalWrapper>
-        ) : null}
-        {secretModal ? (
-          <ModalWrapper onClose={() => setSecretModal(false)}>
-            <Secret member={memberCardInfo as IMember} />
+
+        {loginModal || secretModal || signupModal ? (
+          <ModalWrapper onClose={handleModalClose}>
+            {loginModal ? (
+              <Login
+                member={memberCardInfo as IMember}
+                closeLogin={() => setLoginModal(false)}
+                setSecretModal={setSecretModal}
+              />
+            ) : null}
+            {signupModal ? (
+              <Signup
+                member={memberCardInfo as IMember}
+                closeSignup={() => setSignupModal(false)}
+                setSecretModal={setSecretModal}
+              />
+            ) : null}
+            {secretModal ? <Secret member={memberCardInfo as IMember} /> : null}
           </ModalWrapper>
         ) : null}
       </Layout>
