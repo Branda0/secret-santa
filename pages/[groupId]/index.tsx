@@ -65,7 +65,7 @@ export default function Group({ group }: { group: IGroup }) {
   return (
     <>
       <Head>
-        <title>Secret Santa -</title>
+        <title>{`Secret Santa - ${group.name}`}</title>
         <meta name="description" content="secret santa group page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
