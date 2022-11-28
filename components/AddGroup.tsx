@@ -111,7 +111,7 @@ const AddGroup = () => {
           <input
             type="text"
             id="name"
-            maxLength={12}
+            maxLength={16}
             value={`${groupName.charAt(0).toUpperCase()}${groupName.slice(1)}`}
             onChange={(e) => setGroupName(e.target.value.toLowerCase())}
             required
