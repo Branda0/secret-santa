@@ -18,7 +18,7 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
   return (
     <>
       <Head>
-        <title>Secret Santa</title>
+        <title>Secret Santa -</title>
         <meta name="description" content="secret santa home page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -28,7 +28,7 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
             <h2 className=" font-bold text-lg mb-5 text-center underline underline-offset-8 decoration-2 decoration-red-500 md:text-left ">
               Comment ça marche ?
             </h2>
-            <p className="text-center px-6">
+            <p className="text-center px-4 md:px-0">
               Tu cherches à organiser un <span className="font-semibold ">échange de cadeaux</span> avec tes
               amis ou de la famille ?<br /> Commence donc par
               <span className="font-semibold "> créer ton groupe</span>, puis invite chaque participant à
@@ -49,9 +49,11 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
               Rejoins ton groupe !
             </h2>
             <section className="flex flex-wrap justify-center gap-3 ">
-              {groups.map((group) => (
-                <GroupCard key={`group-${group._id}`} group={group} />
-              ))}
+              {groups
+                .sort((a, b) => (a.name > b.name ? 1 : -1))
+                .map((group) => (
+                  <GroupCard key={`group-${group._id}`} group={group} />
+                ))}
             </section>
           </div>
         </div>

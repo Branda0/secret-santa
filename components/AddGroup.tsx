@@ -35,6 +35,7 @@ const AddGroup = () => {
     // filter empty member table fields
     // if we have less than 3 members or duplicate names return error and skip api call
     const filteredMembers = groupMembers.filter((member) => member.name != "");
+    console.log(filteredMembers);
     const uniqueValues = new Set(filteredMembers.map((member) => member.name.toLowerCase()));
 
     if (uniqueValues.size !== filteredMembers.length) {
@@ -52,7 +53,7 @@ const AddGroup = () => {
     try {
       const response = await fetch("/api/groups", {
         method: "POST",
-        body: JSON.stringify({ name: groupName, members: groupMembers }),
+        body: JSON.stringify({ name: groupName, members: filteredMembers }),
         headers: {
           "Content-Type": "application/json",
         },
