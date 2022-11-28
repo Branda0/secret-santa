@@ -25,7 +25,7 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
       <Layout>
         <div className="flex flex-col gap-10">
           <div className=" flex flex-col text-gray-700">
-            <h2 className=" font-bold text-lg mb-5 text-center underline underline-offset-8 decoration-2 decoration-red-500 md:text-left ">
+            <h2 className=" font-bold text-lg mb-6 text-center underline underline-offset-8 decoration-2 decoration-red-500 md:text-left ">
               Comment ça marche ?
             </h2>
             <p className="text-center px-4 md:px-0">
@@ -46,7 +46,7 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
           </div>
 
           <div className="flex flex-col  ">
-            <h2 className=" font-bold  text-center text-gray-700 text-lg mb-5 underline underline-offset-8 decoration-2 decoration-red-500  md:text-left  ">
+            <h2 className=" font-bold  text-center text-gray-700 text-lg mb-8 underline underline-offset-8 decoration-2 decoration-red-500  md:text-left  ">
               Rejoins ton groupe !
             </h2>
             <section className="flex flex-wrap justify-center gap-3 ">

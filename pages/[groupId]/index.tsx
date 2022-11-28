@@ -70,7 +70,7 @@ export default function Group({ group }: { group: IGroup }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <div className="mt-10 mb-8 text-gray-800 ">
+        <div className="mt-5 mb-8 text-gray-800 ">
           <h2 className=" font-medium text-center text-lg mb-2  ">
             Découvres ton <span className="font-bold text-red-500">Secret Santa </span> ...
           </h2>
