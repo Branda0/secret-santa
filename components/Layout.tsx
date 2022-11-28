@@ -48,8 +48,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </header>
 
-      <main className={" flex-2 flex-col self-center max-w-4xl px-4 sm:px-10 m-auto my-3 "}>{children}</main>
-      <footer className="mt-auto w-full "></footer>
+      <main className={" flex-2 flex-col self-center max-w-4xl px-4 sm:px-10 m-auto my-12 "}>{children}</main>
+      <footer className="flex justify-center items-center mt-auto w-full  bg-red-500">
+        <a
+          href="https://github.com/Branda0/secret-santa"
+          target="_blank"
+          className="pt-2 pb-1 text-white text-xs cursor-pointer"
+        >
+          Gabriel Brandao • 2022
+        </a>
+      </footer>
     </div>
   );
 };

@@ -23,8 +23,8 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <div className="flex flex-col ">
-          <div className=" text-gray-700 my-5">
+        <div className="flex flex-col gap-10">
+          <div className=" flex flex-col text-gray-700">
             <h2 className=" font-bold text-lg mb-5 text-center underline underline-offset-8 decoration-2 decoration-red-500 md:text-left ">
               Comment ça marche ?
             </h2>
@@ -36,15 +36,16 @@ export default function Home({ groups }: { groups: Array<IGroup> }) {
               <span className="font-semibold "> connecter à son propre espace</span> et connaitre
               l&apos;identité de son <span className="font-semibold ">secret santa</span>
             </p>
+            <button
+              className="btn-red self-center flex justify-center items-center px-6 mt-6 "
+              onClick={() => setAddGroupModal(true)}
+            >
+              <FontAwesomeIcon icon={faPlus} className="w-4 text-white mr-2" />
+              Ajouter un groupe
+            </button>
           </div>
-          <button
-            className="btn-red self-center flex justify-center items-center p-6 "
-            onClick={() => setAddGroupModal(true)}
-          >
-            <FontAwesomeIcon icon={faPlus} className="w-4 text-white mr-2" />
-            Ajouter un groupe
-          </button>
-          <div className="flex flex-col mt-10 ">
+
+          <div className="flex flex-col  ">
             <h2 className=" font-bold  text-center text-gray-700 text-lg mb-5 underline underline-offset-8 decoration-2 decoration-red-500  md:text-left  ">
               Rejoins ton groupe !
             </h2>
