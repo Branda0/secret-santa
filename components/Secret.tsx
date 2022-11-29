@@ -10,6 +10,8 @@ const Secret = ({ member }: { member: IMember }) => {
   const [memberData, setMemberData] = useState<IMember | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchData = async () => {
       setIsFetching(true);
 
@@ -20,6 +22,7 @@ const Secret = ({ member }: { member: IMember }) => {
             "Content-Type": "application/json",
             authorization: `Bearer ${Cookies.get("santa-userToken")}`,
           },
+          signal: controller.signal,
         });
 
         const memberData = await response.json();
@@ -38,6 +41,10 @@ const Secret = ({ member }: { member: IMember }) => {
     };
 
     fetchData();
+
+    return () => {
+      controller.abort();
+    };
   }, [member]);
 
   return (

@@ -1,19 +1,17 @@
 import Head from "next/head";
-import { useState, useContext } from "react";
+import { useState } from "react";
 
-import { UserContext, AppContextInterface } from "../../context/User";
 import { GetServerSidePropsContext } from "next";
 import { IGroup, IMember } from "../../types/types";
 import { getGroup } from "../../lib/groups";
 
 import ModalWrapper from "../../components/ModalWrapper";
-import Spinner from "../../components/Spinner";
+import StatusHandler from "../../components/StatusHandler";
 import Login from "../../components/Login";
 import Signup from "../../components/Signup";
 import Secret from "../../components/Secret";
 
 export default function Group({ group }: { group: IGroup }) {
-  const { isLogged, updateName } = useContext(UserContext) as AppContextInterface;
   const [loginModal, setLoginModal] = useState(false);
   const [signupModal, setSignupModal] = useState(false);
   const [secretModal, setSecretModal] = useState(false);
@@ -21,31 +19,8 @@ export default function Group({ group }: { group: IGroup }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleMemberClick = async (member: IMember) => {
-    try {
-      setIsLoading(true);
-      setMembercardInfo(member);
-      const response = await fetch(`/api/members/status?id=${member._id}`, {
-        method: "GET",
-      });
-
-      const memberStatus = await response.json();
-
-      if (response.status === 200) {
-        if (memberStatus.status === "signed") {
-          if (isLogged) {
-            setSecretModal(true);
-          } else {
-            setLoginModal(true);
-          }
-        } else {
-          setSignupModal(true);
-        }
-      }
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
-    }
+    setMembercardInfo(member);
+    setIsLoading(true);
   };
 
   const handleModalClose = () => {
@@ -90,9 +65,13 @@ export default function Group({ group }: { group: IGroup }) {
       {loginModal || secretModal || signupModal || isLoading ? (
         <ModalWrapper onClose={handleModalClose}>
           {isLoading ? (
-            <div className="flex justify-center mt-6 mb-4 w-full sm:min-w-24 ">
-              <Spinner size={7} />
-            </div>
+            <StatusHandler
+              member={memberCardInfo as IMember}
+              setIsLoading={setIsLoading}
+              setSignupModal={setSignupModal}
+              setSecretModal={setSecretModal}
+              setLoginModal={setLoginModal}
+            />
           ) : null}
           {loginModal ? (
             <Login
