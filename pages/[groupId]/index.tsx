@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 
 import { UserContext, AppContextInterface } from "../../context/User";
 import { GetServerSidePropsContext } from "next";
@@ -11,7 +11,6 @@ import Spinner from "../../components/Spinner";
 import Login from "../../components/Login";
 import Signup from "../../components/Signup";
 import Secret from "../../components/Secret";
-import Layout from "../../components/Layout";
 
 export default function Group({ group }: { group: IGroup }) {
   const { isLogged, updateName } = useContext(UserContext) as AppContextInterface;
@@ -24,7 +23,6 @@ export default function Group({ group }: { group: IGroup }) {
   const handleMemberClick = async (member: IMember) => {
     try {
       setIsLoading(true);
-      console.log("TEST");
       setMembercardInfo(member);
       const response = await fetch(`/api/members/status?id=${member._id}`, {
         method: "GET",
@@ -69,51 +67,50 @@ export default function Group({ group }: { group: IGroup }) {
         <meta name="description" content="secret santa group page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout>
-        <div className="mt-5 mb-8 text-gray-800 ">
-          <h2 className=" font-medium text-center text-lg mb-2  ">
-            Découvres ton <span className="font-bold text-red-500">Secret Santa </span> ...
-          </h2>
-        </div>
-        <section className="flex flex-wrap justify-center gap-3 ">
-          {group.members
-            .sort((a, b) => (a.name > b.name ? 1 : -1))
-            .map((member) => (
-              <button
-                key={`member${member.name}`}
-                className="flex flex-col gap-2 justify-center items-center rounded-md min-w-[9rem] shadow-lg p-4 bg-red-500 border-2 border-transparent hover:border-red-700"
-                onClick={() => handleMemberClick(member)}
-              >
-                <span className="text-white capitalize font-medium">{member.name}</span>
-              </button>
-            ))}
-        </section>
 
-        {loginModal || secretModal || signupModal || isLoading ? (
-          <ModalWrapper onClose={handleModalClose}>
-            {isLoading ? (
-              <div className="flex justify-center mt-6 mb-4 w-full sm:min-w-24 ">
-                <Spinner size={7} />
-              </div>
-            ) : null}
-            {loginModal ? (
-              <Login
-                member={memberCardInfo as IMember}
-                closeLogin={() => setLoginModal(false)}
-                setSecretModal={setSecretModal}
-              />
-            ) : null}
-            {signupModal ? (
-              <Signup
-                member={memberCardInfo as IMember}
-                closeSignup={() => setSignupModal(false)}
-                setSecretModal={setSecretModal}
-              />
-            ) : null}
-            {secretModal ? <Secret member={memberCardInfo as IMember} /> : null}
-          </ModalWrapper>
-        ) : null}
-      </Layout>
+      <div className="mt-5 mb-8 text-gray-800 ">
+        <h2 className=" font-medium text-center text-lg mb-2  ">
+          Découvres ton <span className="font-bold text-red-500">Secret Santa </span> ...
+        </h2>
+      </div>
+      <section className="flex flex-wrap justify-center gap-3 ">
+        {group.members
+          .sort((a, b) => (a.name > b.name ? 1 : -1))
+          .map((member) => (
+            <button
+              key={`member${member.name}`}
+              className="flex flex-col gap-2 justify-center items-center rounded-md min-w-[9rem] shadow-lg p-4 bg-red-500 border-2 border-transparent hover:border-red-700"
+              onClick={() => handleMemberClick(member)}
+            >
+              <span className="text-white capitalize font-medium">{member.name}</span>
+            </button>
+          ))}
+      </section>
+
+      {loginModal || secretModal || signupModal || isLoading ? (
+        <ModalWrapper onClose={handleModalClose}>
+          {isLoading ? (
+            <div className="flex justify-center mt-6 mb-4 w-full sm:min-w-24 ">
+              <Spinner size={7} />
+            </div>
+          ) : null}
+          {loginModal ? (
+            <Login
+              member={memberCardInfo as IMember}
+              closeLogin={() => setLoginModal(false)}
+              setSecretModal={setSecretModal}
+            />
+          ) : null}
+          {signupModal ? (
+            <Signup
+              member={memberCardInfo as IMember}
+              closeSignup={() => setSignupModal(false)}
+              setSecretModal={setSecretModal}
+            />
+          ) : null}
+          {secretModal ? <Secret member={memberCardInfo as IMember} /> : null}
+        </ModalWrapper>
+      ) : null}
     </>
   );
 }

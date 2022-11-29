@@ -1,6 +1,4 @@
 import { useState, createContext } from "react";
-import { IUser } from "../types/types";
-
 import Cookies from "js-cookie";
 
 export interface AppContextInterface {
