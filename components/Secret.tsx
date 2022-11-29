@@ -25,7 +25,6 @@ const Secret = ({ member }: { member: IMember }) => {
         const memberData = await response.json();
 
         if (response.status === 200) {
-          console.log(memberData);
           setMemberData(memberData);
           setIsAuth(true);
           setIsFetching(false);

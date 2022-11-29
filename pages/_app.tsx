@@ -13,11 +13,11 @@ const montserrat = Montserrat({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={montserrat.className}>
-      <Layout>
-        <UserProvider>
+      <UserProvider>
+        <Layout>
           <Component {...pageProps} />
-        </UserProvider>
-      </Layout>
+        </Layout>
+      </UserProvider>
     </div>
   );
 }
