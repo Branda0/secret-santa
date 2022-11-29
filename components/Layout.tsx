@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,15 +11,26 @@ import { UserContext, AppContextInterface } from "../context/User";
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { isLogged, updateName, updateToken } = useContext(UserContext) as AppContextInterface;
 
+  // useEffect to avoid hydratation error when ssr and initial ui are different because of isLogged not available on SSR
+  useEffect(() => {
+    setIsMounted(true);
+
+    return function cleanup() {
+      setIsMounted(false);
+    };
+  });
+
   const handleLogout = () => {
     // removes Cookies from browser [userId and auth token]
     updateName(null);
     updateToken(null);
   };
+  const [isMounted, setIsMounted] = useState(false);
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex flex-col  bg-[#F9ADA0] p-2 pb-0">
-        {isLogged ? (
+        {isLogged && isMounted ? (
           <div className=" flex items-center self-end absolute">
             <FontAwesomeIcon icon={faUser} className="w-3 mr-2   text-white" />
             <span className="text-white capitalize font-medium">{`Hello ${Cookies.get(
