@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             account: { token: user.account.token },
           });
         }
-        return res.status(400).json({ message: "Auth refused" });
+        return res.status(401).json({ message: "Unauthorized acces" });
 
         break;
     }
