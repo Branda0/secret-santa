@@ -18,7 +18,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     return function cleanup() {
       setIsMounted(false);
     };
-  });
+  }, []);
 
   const handleLogout = () => {
     // removes Cookies from browser [userId and auth token]
