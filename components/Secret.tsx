@@ -11,7 +11,6 @@ const Secret = ({ member }: { member: IMember }) => {
 
   useEffect(() => {
     const controller = new AbortController();
-
     const fetchData = async () => {
       setIsFetching(true);
 
@@ -30,18 +29,14 @@ const Secret = ({ member }: { member: IMember }) => {
         if (response.status === 200) {
           setMemberData(memberData);
           setIsAuth(true);
-          setIsFetching(false);
-        } else {
-          setIsFetching(false);
         }
       } catch (error) {
         console.log(error);
-        setIsFetching(false);
+        if (controller.signal.aborted) return;
       }
+      setIsFetching(false);
     };
-
     fetchData();
-
     return () => {
       controller.abort();
     };

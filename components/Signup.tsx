@@ -76,7 +76,7 @@ const Signup = ({
         </div>
 
         {isSigning ? (
-          <div className="flex justify-center my-2">
+          <div className="btn-red w-full flex justify-center my-2">
             <Spinner size={7} />
           </div>
         ) : (
