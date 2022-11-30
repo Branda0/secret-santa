@@ -44,6 +44,7 @@ const StatusHandler = ({
         }
       } catch (error) {
         console.log(error);
+        if (controller.signal.aborted) return;
       }
       setIsLoading(false);
     };
