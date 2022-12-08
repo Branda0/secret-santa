@@ -23,8 +23,7 @@ const ModalWrapper = ({ children, onClose }: { children: React.ReactNode; onClos
   return (
     <div
       id="modal-wrapper"
-      className="fixed inset-0 bg-opacity-40 px-2 bg-black
-     backdrop-blur flex flex-col items-center justify-center "
+      className="fixed inset-0 bg-opacity-40 px-2 bg-black border-2 backdrop-blur flex flex-col items-center justify-center py-20 "
       onClick={handleOverlayClick}
     >
       <div
